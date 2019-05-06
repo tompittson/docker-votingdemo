@@ -28,7 +28,6 @@ services:
       placement:
         constraints:
           - node.labels.postgres==slave
-      replicas: 1
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_PASSWORD: postgres
