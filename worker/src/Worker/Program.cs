@@ -12,11 +12,13 @@ namespace Worker
 {
     public class Program
     {
+        const string ConnectionString = "Server=db-master;Username=postgres;Password=postgres;";
+
         public static int Main(string[] args)
         {
             try
             {
-                var pgsql = OpenDbConnection("Server=db-master;Username=postgres;");
+                var pgsql = OpenDbConnection(ConnectionString);
                 var redisConn = OpenRedisConnection("redis");
                 var redis = redisConn.GetDatabase();
 
@@ -46,7 +48,7 @@ namespace Worker
                         if (!pgsql.State.Equals(System.Data.ConnectionState.Open))
                         {
                             Console.WriteLine("Reconnecting DB");
-                            pgsql = OpenDbConnection("Server=db-master;Username=postgres;");
+                            pgsql = OpenDbConnection(ConnectionString);
                         }
 
                         UpdateVote(pgsql, vote.voter_id, vote.vote);
