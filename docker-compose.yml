@@ -3,7 +3,7 @@ version: "3"
 services:
 
   vote:  
-    image: localhost:5000/votingdemo-vote
+    image: localhost:5050/votingdemo-vote
     build: ./vote
     command: python app.py
     volumes:
@@ -15,7 +15,7 @@ services:
       - back-tier
 
   result:
-    image: localhost:5000/votingdemo-result
+    image: localhost:5050/votingdemo-result
     build: ./result
     command: nodemon server.js
     volumes:
@@ -28,7 +28,7 @@ services:
       - back-tier
 
   worker:
-    image: localhost:5000/votingdemo-worker
+    image: localhost:5050/votingdemo-worker
     build:
       context: ./worker
     depends_on:

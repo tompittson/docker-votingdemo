@@ -24,7 +24,7 @@ services:
         condition: on-failure
 
   vote:
-    image: localhost:5000/votingdemo-vote:before
+    image: localhost:5050/votingdemo-vote
     ports:
       - 5000:80
     networks:
@@ -39,7 +39,7 @@ services:
         condition: on-failure
 
   result:
-    image: dockersamples/votingdemo-result:before
+    image: localhost:5050/votingdemo-result
     ports:
       - 5001:80
     networks:
@@ -55,7 +55,7 @@ services:
         condition: on-failure
 
   worker:
-    image: dockersamples/votingdemo-worker
+    image: localhost:5050/votingdemo-worker
     networks:
       - frontend
       - backend
