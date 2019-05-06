@@ -24,6 +24,7 @@ services:
     networks:
       - backend
     deploy:
+      mode: global
       placement:
         constraints:
           - node.labels.postgres==slave
