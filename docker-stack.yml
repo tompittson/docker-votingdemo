@@ -1,15 +1,38 @@
 version: "3"
 services:
 
-  db:
-    image: postgres:9.4
+  db-master:
+    image: localhost:5050/votingdemo-db:master-slave
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres-master:/var/lib/postgresql/data:rw
     networks:
       - backend
     deploy:
       placement:
-        constraints: [node.role == manager]
+        constraints:
+          - node.labels.postgres==master
+      replicas: 1
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+
+  db-slave:
+    image: localhost:5050/votingdemo-db:master-slave
+    volumes:
+      - postgres-master:/var/lib/postgresql/data:rw
+    networks:
+      - backend
+    deploy:
+      placement:
+        constraints:
+          - node.labels.postgres==slave
+      replicas: 1
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      REPLICATE_FROM: db-master
 
   redis:
     image: redis:alpine
@@ -76,4 +99,5 @@ networks:
   backend:
 
 volumes:
-  db-data:
+  postgres-master: {}
+  postgres-slave: {}

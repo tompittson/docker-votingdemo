@@ -44,7 +44,9 @@ services:
       - back-tier
 
   db:
-    image: postgres:9.4
+    image: localhost:5050/votingdemo-db:master-slave
+    build:
+      context: ./database
     container_name: db
     volumes:
       - "db-data:/var/lib/postgresql/data"
