@@ -13,7 +13,10 @@ services:
         constraints: [node.role == manager]
 
   registry:
+    restart: always
     image: registry:2
+    volumes:
+      - registry-data:/var/lib/registry
     ports:
       - "5050:5000"
     deploy:
@@ -25,4 +28,4 @@ networks:
   backend:
 
 volumes:
-  db-data:
+  registry-data:
