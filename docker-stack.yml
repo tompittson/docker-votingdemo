@@ -48,7 +48,7 @@ services:
         condition: on-failure
 
   vote:
-    image: localhost:5050/votingdemo-vote
+    image: localhost:5050/votingdemo-vote:master-slave
     ports:
       - 5000:80
     networks:
@@ -63,7 +63,7 @@ services:
         condition: on-failure
 
   result:
-    image: localhost:5050/votingdemo-result
+    image: localhost:5050/votingdemo-result:master-slave
     ports:
       - 5001:80
     networks:
@@ -79,7 +79,7 @@ services:
         condition: on-failure
 
   worker:
-    image: localhost:5050/votingdemo-worker
+    image: localhost:5050/votingdemo-worker:master-slave
     networks:
       - frontend
       - backend
