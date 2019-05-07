@@ -37,7 +37,7 @@ services:
         condition: on-failure
 
   vote:
-    image: localhost:5050/votingdemo-vote:master-slave
+    image: localhost:5050/votingdemo-vote:cockroach
     ports:
       - 5000:80
     networks:
@@ -52,7 +52,7 @@ services:
         condition: on-failure
 
   result:
-    image: localhost:5050/votingdemo-result:master-slave
+    image: localhost:5050/votingdemo-result:cockroach
     ports:
       - 5001:80
     networks:
@@ -68,7 +68,7 @@ services:
         condition: on-failure
 
   worker:
-    image: localhost:5050/votingdemo-worker:master-slave
+    image: localhost:5050/votingdemo-worker:cockroach
     networks:
       - frontend
       - backend
