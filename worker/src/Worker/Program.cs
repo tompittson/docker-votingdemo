@@ -12,7 +12,7 @@ namespace Worker
 {
     public class Program
     {
-        const string ConnectionString = "Host=" + host + ";Port=26257;Database=store;Username=root";
+        const string ConnectionString = "Host=db;Port=26257;Database=store;Username=root";
 
         public static int Main(string[] args)
         {
