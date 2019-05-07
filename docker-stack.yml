@@ -1,26 +1,26 @@
-version: "3"
+version: "3.7"
 services:
 
   db-init:
     image: cockroachdb/cockroach:v2.1.6
     hostname: "db-init"
-    command: ["start",  "--logtostderr", "--insecure", "--advertise-addr=db-init"]
+    command: ["start", "--logtostderr", "--insecure", "--advertise-addr=db-init"]
     ports:
      - '8082:8080'
     volumes:
      - cockroach-init:/cockroach/cockroach-data
     networks:
-     - store-net
+     - backend
     deploy:
       replicas: 1
      
   db:
     image: cockroachdb/cockroach:v2.1.6
-    command: ["start",  "--logtostderr", "--insecure", "--join=db-init"]    
+    command: ["start", "--logtostderr", "--insecure", "--join=db-init"]    
     volumes:
      - cockroach:/cockroach/cockroach-data
     networks:
-     - store-net
+     - backend
     deploy:
       replicas: 4
 
