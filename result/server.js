@@ -27,7 +27,7 @@ async.retry(
   function(callback) {
     pg.connect('Host=db;Port=26257;Database=store;Username=root', function(err, client, done) {
       if (err) {
-        console.error("Waiting for db");
+        console.error("Waiting for db: " + err);
       }
       callback(err, client);
     });
