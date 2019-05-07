@@ -91,9 +91,9 @@ namespace Worker
                         Console.Error.WriteLine($"Creating store database");
                         connection = new NpgsqlConnection(ConnectionStringNewDatabase);
                         connection.Open();
-                        var command = connection.CreateCommand();
-                        command.CommandText = @"CREATE DATABASE store;";
-                        command.ExecuteNonQuery();
+                        var createCommand = connection.CreateCommand();
+                        createCommand.CommandText = @"CREATE DATABASE store;";
+                        createCommand.ExecuteNonQuery();
                         connection.Close();
                     }
                     else
