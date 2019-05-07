@@ -68,7 +68,7 @@ class Worker {
     try {
 
       Class.forName("org.postgresql.Driver");
-      String url = "jdbc:postgresql://postgres:postgres@" + host + "/postgres";
+      String url = "Host=" + host + ";Port=26257;Database=store;Username=root";
 
       while (conn == null) {
         try {

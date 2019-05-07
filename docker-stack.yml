@@ -1,38 +1,28 @@
 version: "3"
 services:
 
-  db-master:
-    image: localhost:5050/votingdemo-db:master-slave
+  db-init:
+    image: cockroachdb/cockroach:v2.1.6
+    hostname: "db-init"
+    command: ["start",  "--logtostderr", "--insecure", "--advertise-addr=db-init"]
+    ports:
+     - '8082:8080'
     volumes:
-      - postgres-master:/var/lib/postgresql/data:rw
+     - cockroach-init:/cockroach/cockroach-data
     networks:
-      - backend
+     - store-net
     deploy:
-      placement:
-        constraints:
-          - node.labels.postgres==master
       replicas: 1
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-
-  db-slave:
-    image: localhost:5050/votingdemo-db:master-slave
+     
+  db:
+    image: cockroachdb/cockroach:v2.1.6
+    command: ["start",  "--logtostderr", "--insecure", "--join=db-init"]    
     volumes:
-      - postgres-master:/var/lib/postgresql/data:rw
+     - cockroach:/cockroach/cockroach-data
     networks:
-      - backend
+     - store-net
     deploy:
-      mode: global
-      placement:
-        constraints:
-          - node.labels.postgres==slave
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-      REPLICATE_FROM: db-master
+      replicas: 4
 
   redis:
     image: redis:alpine
@@ -99,5 +89,10 @@ networks:
   backend:
 
 volumes:
-  postgres-master: {}
-  postgres-slave: {}
+  cockroach-init:    
+    driver: 'cloudstor:azure'
+    driver_opts:
+      share: 'cockroach-init'
+  cockroach:
+    name: '{{.Service.Name}}-{{.Task.Slot}}'
+    driver: 'cloudstor:azure'
