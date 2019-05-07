@@ -13,6 +13,7 @@ namespace Worker
     public class Program
     {
         const string ConnectionString = "Host=db;Port=26257;Database=store;Username=root";
+        const string ConnectionStringNewDatabase = "Host=db;Port=26257;Username=root";
 
         public static int Main(string[] args)
         {
@@ -80,13 +81,26 @@ namespace Worker
                 }
                 catch (SocketException ex)
                 {
-                    Console.Error.WriteLine($"Waiting for db: {ex.Message}");
+                    Console.Error.WriteLine($"Waiting for db SocketException: {ex.Message}");
                     Thread.Sleep(1000);
                 }
                 catch (DbException ex)
                 {
-                    Console.Error.WriteLine($"Waiting for db: {ex.Message}");
-                    Thread.Sleep(1000);
+                    if (ex.Message.StartsWith("3D000"))
+                    {
+                        Console.Error.WriteLine($"Creating store database");
+                        connection = new NpgsqlConnection(ConnectionStringNewDatabase);
+                        connection.Open();
+                        var command = connection.CreateCommand();
+                        command.CommandText = @"CREATE DATABASE store;";
+                        command.ExecuteNonQuery();
+                        connection.Close();
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine($"Waiting for db DbException: {ex.Message}");
+                        Thread.Sleep(1000);
+                    }
                 }
             }
 
