@@ -13,6 +13,8 @@ services:
      - backend
     deploy:
       replicas: 1
+      placement:
+        constraints: [node.role == worker]
      
   db:
     image: cockroachdb/cockroach:v2.1.6
@@ -23,6 +25,8 @@ services:
      - backend
     deploy:
       replicas: 4
+      placement:
+        constraints: [node.role == worker]
 
   redis:
     image: redis:alpine
@@ -35,6 +39,8 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == worker]
 
   vote:
     image: localhost:5050/votingdemo-vote:cockroach
@@ -50,6 +56,8 @@ services:
         parallelism: 2
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == worker]
 
   result:
     image: localhost:5050/votingdemo-result:cockroach
@@ -66,6 +74,8 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
+      placement:
+        constraints: [node.role == worker]
 
   worker:
     image: localhost:5050/votingdemo-worker:cockroach
@@ -82,7 +92,7 @@ services:
         max_attempts: 3
         window: 120s
       placement:
-        constraints: [node.role == manager]
+        constraints: [node.role == worker]
 
 networks:
   frontend:
