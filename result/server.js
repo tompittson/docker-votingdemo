@@ -27,7 +27,7 @@ async.retry(
   function(callback) {
     pg.connect('postgres://postgres:postgres@db-slave/postgres', function(err, client, done) {
       if (err) {
-        console.error("Waiting for db");
+        console.error("Waiting for db" + err);
       }
       callback(err, client);
     });
